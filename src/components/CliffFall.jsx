@@ -14,8 +14,8 @@ export default function CliffFall({ animal, onComplete }) {
   const [isHolding, setIsHolding] = useState(false)
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setPhase('falling'), 2000)
-    const timer2 = setTimeout(() => setPhase('holding'), 4000)
+    const timer1 = setTimeout(() => setPhase('falling'), 3000)
+    const timer2 = setTimeout(() => setPhase('holding'), 5000)
 
     return () => {
       clearTimeout(timer1)
@@ -77,98 +77,161 @@ export default function CliffFall({ animal, onComplete }) {
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
+      onTouchStart={handlePointerDown}
+      onTouchEnd={handlePointerUp}
     >
+      {/* MASSIVE CLIFF EDGE */}
       {phase === 'approach' && (
-        <motion.div
-          initial={{ x: -200 }}
-          animate={{ x: 0 }}
-          style={{
+        <>
+          {/* The cliff mountain */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{
+              position: 'absolute',
+              right: 0,
+              bottom: 0,
+              width: '40%',
+              height: '70%',
+              background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 100%)',
+              clipPath: 'polygon(0 30%, 100% 0, 100% 100%, 0 100%)',
+              zIndex: 1,
+              boxShadow: 'inset -20px -20px 50px rgba(0,0,0,0.3)'
+            }}
+          />
+
+          {/* Cliff edge highlight */}
+          <div style={{
             position: 'absolute',
-            right: 0,
-            top: '40%',
-            width: '200px',
-            height: '60%',
-            background: '#8B4513',
-            clipPath: 'polygon(0 0, 100% 30%, 100% 100%, 0 100%)',
-            zIndex: 1
-          }}
-        />
+            right: '40%',
+            top: '30%',
+            width: '5px',
+            height: '70%',
+            background: '#D2691E',
+            zIndex: 2
+          }} />
+
+          {/* Rocks on cliff */}
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                right: `${5 + i * 7}%`,
+                bottom: `${10 + i * 12}%`,
+                width: '30px',
+                height: '30px',
+                background: '#696969',
+                borderRadius: '50%',
+                zIndex: 1
+              }}
+            />
+          ))}
+        </>
       )}
 
+      {/* Approach phase - RUNNING TOWARDS CLIFF */}
       {phase === 'approach' && (
         <>
           <motion.div
-            animate={{ x: [0, window.innerWidth * 0.5] }}
-            transition={{ duration: 2, ease: 'easeInOut' }}
+            animate={{ x: [0, window.innerWidth * 0.55] }}
+            transition={{ duration: 2.5, ease: 'easeInOut' }}
             style={{
               position: 'absolute',
-              left: '10%',
-              top: '45%',
+              left: '5%',
+              top: '35%',
               fontSize: '80px',
-              zIndex: 2
+              zIndex: 3
             }}
           >
             {animalEmojis[animal]}
           </motion.div>
 
           <motion.div
-            animate={{ x: [0, window.innerWidth * 0.5] }}
-            transition={{ duration: 2, ease: 'easeInOut', delay: 0.2 }}
+            animate={{ x: [0, window.innerWidth * 0.55] }}
+            transition={{ duration: 2.5, ease: 'easeInOut', delay: 0.2 }}
             style={{
               position: 'absolute',
-              left: '5%',
-              top: '45%',
+              left: '0%',
+              top: '35%',
               fontSize: '70px',
-              zIndex: 2
+              zIndex: 3
             }}
           >
             🏃
           </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            style={{
+              position: 'absolute',
+              top: '15%',
+              fontSize: '32px',
+              color: '#fff',
+              fontWeight: 'bold',
+              textShadow: '2px 2px 10px rgba(0,0,0,0.5)',
+              zIndex: 4
+            }}
+          >
+            They reached the cliff edge...
+          </motion.p>
         </>
       )}
-      
+
+      {/* FALLING PHASE - DRAMATIC FALL */}
       {(phase === 'falling' || phase === 'holding' || phase === 'saved') && (
         <>
+          {/* Person falling - TUMBLING */}
           <motion.div
-            initial={{ y: 0 }}
+            initial={{ y: 0, rotate: 0 }}
             animate={
               phase === 'saved'
-                ? { y: 200, rotate: 0 }
-                : { y: [0, window.innerHeight * 0.3], rotate: [0, 360, 720] }
+                ? { y: window.innerHeight * 0.4, rotate: 0, scale: 1 }
+                : { 
+                    y: [0, window.innerHeight * 0.5], 
+                    rotate: [0, 180, 360, 540],
+                    scale: [1, 0.8, 1]
+                  }
             }
             transition={
               phase === 'saved'
                 ? { duration: 0.8, ease: 'easeOut' }
-                : { duration: 2, ease: 'easeIn' }
+                : { duration: 2.5, ease: 'easeIn' }
             }
             style={{
               position: 'absolute',
               top: '10%',
-              left: '50%',
-              transform: 'translateX(-50%)',
+              left: '45%',
               fontSize: '70px',
-              zIndex: 3
+              zIndex: 3,
+              filter: phase === 'falling' || phase === 'holding' ? 'blur(1px)' : 'none'
             }}
           >
             🧑
           </motion.div>
 
+          {/* Animal falling with person */}
           <motion.div
-            initial={{ y: 0 }}
+            initial={{ y: 0, rotate: 0 }}
             animate={
               phase === 'saved'
-                ? { y: 200, rotate: 0 }
-                : { y: [0, window.innerHeight * 0.3], rotate: [0, -180, -360] }
+                ? { y: window.innerHeight * 0.4, rotate: 0 }
+                : { 
+                    y: [0, window.innerHeight * 0.5], 
+                    rotate: [0, -180, -360]
+                  }
             }
             transition={
               phase === 'saved'
                 ? { duration: 0.8, ease: 'easeOut' }
-                : { duration: 2, ease: 'easeIn' }
+                : { duration: 2.5, ease: 'easeIn' }
             }
             style={{
               position: 'absolute',
-              top: '5%',
-              left: '55%',
+              top: '8%',
+              left: '52%',
               fontSize: '60px',
               zIndex: 3
             }}
@@ -176,26 +239,28 @@ export default function CliffFall({ animal, onComplete }) {
             {animalEmojis[animal]}
           </motion.div>
 
-          {[...Array(10)].map((_, i) => (
+          {/* WIND EFFECT */}
+          {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
               initial={{ y: -100, opacity: 0 }}
               animate={{
                 y: window.innerHeight + 100,
-                opacity: [0, 0.3, 0]
+                opacity: [0, 0.5, 0],
+                x: [0, Math.random() * 50 - 25]
               }}
               transition={{
-                duration: 1.5,
+                duration: 1,
                 repeat: Infinity,
-                delay: i * 0.15,
+                delay: i * 0.08,
                 ease: 'linear'
               }}
               style={{
                 position: 'absolute',
-                left: `${20 + i * 8}%`,
+                left: `${30 + i * 2.5}%`,
                 width: '3px',
-                height: '50px',
-                background: 'rgba(255,255,255,0.5)',
+                height: '60px',
+                background: 'rgba(255,255,255,0.6)',
                 borderRadius: '2px'
               }}
             />
@@ -203,14 +268,15 @@ export default function CliffFall({ animal, onComplete }) {
         </>
       )}
 
+      {/* "CATCH ME" TEXT - BIGGER AND BETTER */}
       {phase === 'falling' && (
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.8 }}
           style={{
             position: 'absolute',
-            top: '50%',
+            top: '55%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             textAlign: 'center',
@@ -219,47 +285,52 @@ export default function CliffFall({ animal, onComplete }) {
         >
           <motion.h1
             animate={{
-              scale: [1, 1.1, 1],
+              scale: [1, 1.15, 1],
               textShadow: [
-                '0 0 20px rgba(255,20,147,0.5)',
-                '0 0 40px rgba(255,20,147,0.8)',
-                '0 0 20px rgba(255,20,147,0.5)'
+                '0 0 30px rgba(255,20,147,0.6)',
+                '0 0 60px rgba(255,20,147,1)',
+                '0 0 30px rgba(255,20,147,0.6)'
               ]
             }}
             transition={{ duration: 1.5, repeat: Infinity }}
             style={{
-              fontSize: '52px',
+              fontSize: '64px',
               color: 'white',
               fontWeight: 'bold',
-              textShadow: '0 0 30px rgba(255,20,147,0.6)',
-              marginBottom: '10px'
+              textShadow: '0 0 40px rgba(255,20,147,0.8)',
+              marginBottom: '15px',
+              lineHeight: 1.2
             }}
           >
-            Catch me...
+            CATCH ME...
           </motion.h1>
           <motion.h2
-            animate={{ opacity: [0.8, 1, 0.8] }}
-            transition={{ duration: 1, repeat: Infinity }}
+            animate={{ 
+              opacity: [0.8, 1, 0.8],
+              scale: [0.95, 1.05, 0.95]
+            }}
+            transition={{ duration: 1.2, repeat: Infinity }}
             style={{
-              fontSize: '38px',
+              fontSize: '48px',
               color: '#FFD700',
               fontWeight: 'bold',
-              textShadow: '0 0 20px rgba(255,215,0,0.8)',
+              textShadow: '0 0 30px rgba(255,215,0,1)',
               fontStyle: 'italic'
             }}
           >
-            I'm falling for you 💕
+            I'M FALLING FOR YOU 💕
           </motion.h2>
         </motion.div>
       )}
 
+      {/* HOLD INSTRUCTION - CLEARER */}
       {phase === 'holding' && holdProgress < 100 && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           style={{
             position: 'absolute',
-            bottom: '25%',
+            bottom: '20%',
             left: '50%',
             transform: 'translateX(-50%)',
             textAlign: 'center',
@@ -267,63 +338,69 @@ export default function CliffFall({ animal, onComplete }) {
           }}
         >
           <motion.div
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
+            animate={{ scale: [1, 1.3, 1] }}
+            transition={{ duration: 0.8, repeat: Infinity }}
             style={{
-              fontSize: '80px',
+              fontSize: '100px',
               marginBottom: '20px'
             }}
           >
-            👆
+            👇
           </motion.div>
 
           <h2 style={{
-            fontSize: '42px',
+            fontSize: '52px',
             color: 'white',
             fontWeight: 'bold',
             marginBottom: '15px',
-            textShadow: '0 0 30px rgba(0,0,0,0.5)'
+            textShadow: '0 0 30px rgba(0,0,0,0.8)',
+            background: 'linear-gradient(135deg, #ff69b4, #ff1493)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            filter: 'drop-shadow(0 0 20px rgba(255,20,147,0.8))'
           }}>
             HOLD THE SCREEN!
           </h2>
 
           <p style={{
-            fontSize: '22px',
+            fontSize: '28px',
             color: '#FFD700',
             fontStyle: 'italic',
-            textShadow: '0 0 20px rgba(0,0,0,0.5)'
+            textShadow: '0 0 20px rgba(0,0,0,0.8)',
+            fontWeight: 'bold',
+            marginBottom: '30px'
           }}>
             Save them from falling!
           </p>
 
+          {/* BETTER Progress ring */}
           <div style={{
-            marginTop: '30px',
             position: 'relative',
-            width: '150px',
-            height: '150px',
-            margin: '30px auto'
+            width: '180px',
+            height: '180px',
+            margin: '0 auto'
           }}>
-            <svg width="150" height="150" style={{ transform: 'rotate(-90deg)' }}>
+            <svg width="180" height="180" style={{ transform: 'rotate(-90deg)' }}>
               <circle
-                cx="75"
-                cy="75"
-                r="65"
+                cx="90"
+                cy="90"
+                r="75"
                 stroke="rgba(255,255,255,0.3)"
-                strokeWidth="12"
+                strokeWidth="15"
                 fill="none"
               />
               <motion.circle
-                cx="75"
-                cy="75"
-                r="65"
+                cx="90"
+                cy="90"
+                r="75"
                 stroke="#FFD700"
-                strokeWidth="12"
+                strokeWidth="15"
                 fill="none"
                 strokeLinecap="round"
-                strokeDasharray={`${2 * Math.PI * 65}`}
-                strokeDashoffset={`${2 * Math.PI * 65 * (1 - holdProgress / 100)}`}
+                strokeDasharray={`${2 * Math.PI * 75}`}
+                strokeDashoffset={`${2 * Math.PI * 75 * (1 - holdProgress / 100)}`}
                 style={{
-                  filter: 'drop-shadow(0 0 10px rgba(255,215,0,0.8))'
+                  filter: 'drop-shadow(0 0 15px rgba(255,215,0,1))'
                 }}
               />
             </svg>
@@ -333,9 +410,10 @@ export default function CliffFall({ animal, onComplete }) {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              fontSize: '32px',
+              fontSize: '42px',
               color: 'white',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              textShadow: '0 0 10px rgba(0,0,0,0.8)'
             }}>
               {Math.round(holdProgress)}%
             </div>
@@ -343,6 +421,7 @@ export default function CliffFall({ animal, onComplete }) {
         </motion.div>
       )}
 
+      {/* SAVED PHASE - CELEBRATION */}
       {phase === 'saved' && (
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
@@ -357,37 +436,40 @@ export default function CliffFall({ animal, onComplete }) {
           }}
         >
           <motion.div
-            animate={{ scale: [1, 1.3, 1], rotate: [0, 360] }}
+            animate={{ scale: [1, 1.4, 1], rotate: [0, 360] }}
             transition={{ duration: 1.5 }}
-            style={{ fontSize: '100px', marginBottom: '20px' }}
+            style={{ fontSize: '120px', marginBottom: '20px' }}
           >
             💖
           </motion.div>
 
           <h1 style={{
-            fontSize: '48px',
+            fontSize: '56px',
             color: 'white',
             fontWeight: 'bold',
-            textShadow: '0 0 30px rgba(255,215,0,0.8)'
+            textShadow: '0 0 40px rgba(255,215,0,1)',
+            marginBottom: '10px'
           }}>
-            Safe Landing!
+            SAFE LANDING!
           </h1>
 
           <p style={{
-            fontSize: '24px',
+            fontSize: '32px',
             color: '#FFD700',
             fontStyle: 'italic',
             marginTop: '10px',
-            textShadow: '0 0 20px rgba(0,0,0,0.5)'
+            textShadow: '0 0 20px rgba(0,0,0,0.8)',
+            fontWeight: 'bold'
           }}>
-            You caught them with your heart...
+            You caught them with your heart! 💕
           </p>
         </motion.div>
       )}
 
+      {/* MASSIVE CONFETTI on save */}
       {phase === 'saved' && (
         <>
-          {[...Array(30)].map((_, i) => (
+          {[...Array(50)].map((_, i) => (
             <motion.div
               key={i}
               initial={{
@@ -396,22 +478,22 @@ export default function CliffFall({ animal, onComplete }) {
                 opacity: 1
               }}
               animate={{
-                x: window.innerWidth / 2 + (Math.random() - 0.5) * 800,
+                x: window.innerWidth / 2 + (Math.random() - 0.5) * 1000,
                 y: [window.innerHeight / 2, window.innerHeight + 100],
                 opacity: 0,
-                rotate: Math.random() * 720
+                rotate: Math.random() * 1080
               }}
               transition={{
-                duration: 2,
+                duration: 2.5,
                 ease: 'easeOut'
               }}
               style={{
                 position: 'absolute',
-                fontSize: '30px',
+                fontSize: '40px',
                 pointerEvents: 'none'
               }}
             >
-              {['💕', '💖', '💗', '💝', '✨', '🌟'][Math.floor(Math.random() * 6)]}
+              {['💕', '💖', '💗', '💝', '✨', '🌟', '⭐'][Math.floor(Math.random() * 7)]}
             </motion.div>
           ))}
         </>
