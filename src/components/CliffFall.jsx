@@ -130,32 +130,34 @@ export default function CliffFall({ animal, onComplete }) {
         </>
       )}
 
-      {/* Approach phase - RUNNING TOWARDS CLIFF */}
+      {/* APPROACH PHASE - RUNNING TOWARDS CLIFF (LEFT TO RIGHT, FACING RIGHT) */}
       {phase === 'approach' && (
         <>
+          {/* Animal running to cliff edge - FLIPPED TO FACE RIGHT */}
           <motion.div
-            animate={{ x: [0, window.innerWidth * 0.55] }}
+            animate={{ left: ['5%', '55%'] }}
             transition={{ duration: 2.5, ease: 'easeInOut' }}
             style={{
               position: 'absolute',
-              left: '5%',
               top: '35%',
               fontSize: '80px',
-              zIndex: 3
+              zIndex: 3,
+              transform: 'scaleX(-1)' // FLIP TO FACE RIGHT
             }}
           >
             {animalEmojis[animal]}
           </motion.div>
 
+          {/* Person chasing - FLIPPED TO FACE RIGHT */}
           <motion.div
-            animate={{ x: [0, window.innerWidth * 0.55] }}
-            transition={{ duration: 2.5, ease: 'easeInOut', delay: 0.2 }}
+            animate={{ left: ['0%', '48%'] }}
+            transition={{ duration: 2.5, ease: 'easeInOut' }}
             style={{
               position: 'absolute',
-              left: '0%',
               top: '35%',
               fontSize: '70px',
-              zIndex: 3
+              zIndex: 3,
+              transform: 'scaleX(-1)' // FLIP TO FACE RIGHT
             }}
           >
             🏃
@@ -268,7 +270,7 @@ export default function CliffFall({ animal, onComplete }) {
         </>
       )}
 
-      {/* "CATCH ME" TEXT - BIGGER AND BETTER */}
+      {/* "CATCH ME" TEXT */}
       {phase === 'falling' && (
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
@@ -323,7 +325,7 @@ export default function CliffFall({ animal, onComplete }) {
         </motion.div>
       )}
 
-      {/* HOLD INSTRUCTION - CLEARER */}
+      {/* HOLD INSTRUCTION */}
       {phase === 'holding' && holdProgress < 100 && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -373,7 +375,6 @@ export default function CliffFall({ animal, onComplete }) {
             Save them from falling!
           </p>
 
-          {/* BETTER Progress ring */}
           <div style={{
             position: 'relative',
             width: '180px',
@@ -421,7 +422,7 @@ export default function CliffFall({ animal, onComplete }) {
         </motion.div>
       )}
 
-      {/* SAVED PHASE - CELEBRATION */}
+      {/* SAVED PHASE */}
       {phase === 'saved' && (
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
@@ -466,7 +467,7 @@ export default function CliffFall({ animal, onComplete }) {
         </motion.div>
       )}
 
-      {/* MASSIVE CONFETTI on save */}
+      {/* CONFETTI */}
       {phase === 'saved' && (
         <>
           {[...Array(50)].map((_, i) => (
