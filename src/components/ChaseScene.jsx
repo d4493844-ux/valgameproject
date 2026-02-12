@@ -43,7 +43,6 @@ export default function ChaseScene({ animal, onComplete }) {
         overflow: 'hidden'
       }}
     >
-      {/* Sunset sky */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -55,7 +54,6 @@ export default function ChaseScene({ animal, onComplete }) {
         pointerEvents: 'none'
       }} />
 
-      {/* Big beautiful sun */}
       <motion.div
         animate={{ 
           y: [0, -20, 0],
@@ -75,7 +73,6 @@ export default function ChaseScene({ animal, onComplete }) {
         }}
       />
 
-      {/* Grass field */}
       <div style={{
         position: 'absolute',
         bottom: 0,
@@ -86,7 +83,6 @@ export default function ChaseScene({ animal, onComplete }) {
         borderTop: '3px solid rgba(34, 139, 34, 0.3)'
       }} />
 
-      {/* Floating hearts */}
       {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
@@ -115,7 +111,7 @@ export default function ChaseScene({ animal, onComplete }) {
         </motion.div>
       ))}
 
-      {/* THE CHASE - FIXED TO FACE FORWARD */}
+      {/* THE CHASE - FIXED: ANIMAL IN FRONT, PERSON BEHIND */}
       <div style={{
         width: '100%',
         maxWidth: '800px',
@@ -123,52 +119,47 @@ export default function ChaseScene({ animal, onComplete }) {
         position: 'relative',
         zIndex: 1
       }}>
-        {/* Animal being chased - MOVES RIGHT */}
+        {/* Animal AHEAD - running RIGHT, stays in front */}
         <motion.div
           animate={{
-            x: [50, window.innerWidth * 0.7],
-            y: [0, -30, 0, -20, 0]
+            x: [100, window.innerWidth * 0.75]
           }}
           transition={{
             duration: 5,
-            ease: 'easeInOut'
+            ease: 'linear'
           }}
           style={{
             position: 'absolute',
             left: 0,
             top: '50%',
             fontSize: '80px',
-            zIndex: 2,
-            transform: 'scaleX(1)' // FACES RIGHT
+            zIndex: 2
           }}
         >
           {animalEmojis[animal]}
         </motion.div>
 
-        {/* Person chasing - RUNNING TO THE RIGHT */}
+        {/* Person BEHIND - chasing, runs RIGHT */}
         <motion.div
           animate={{
-            x: [0, window.innerWidth * 0.7],
-            y: [0, -25, 0, -15, 0]
+            x: [0, window.innerWidth * 0.7]
           }}
           transition={{
             duration: 5,
-            ease: 'easeInOut',
-            delay: 0.3
+            ease: 'linear'
           }}
           style={{
             position: 'absolute',
             left: 0,
             top: '50%',
             fontSize: '70px',
-            zIndex: 1,
-            transform: 'scaleX(1)' // FACES RIGHT (FORWARD)
+            zIndex: 1
           }}
         >
-          🏃
+          🏃‍♂️
         </motion.div>
 
-        {/* Heart trail */}
+        {/* Heart trail behind runner */}
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
@@ -176,13 +167,12 @@ export default function ChaseScene({ animal, onComplete }) {
             animate={{
               opacity: [0, 0.6, 0],
               scale: [0, 1.5, 0],
-              x: [0, window.innerWidth * 0.7],
-              y: 0
+              x: [0, window.innerWidth * 0.7]
             }}
             transition={{
               duration: 5,
-              delay: i * 0.3,
-              ease: 'easeOut'
+              delay: i * 0.4,
+              ease: 'linear'
             }}
             style={{
               position: 'absolute',
@@ -197,7 +187,6 @@ export default function ChaseScene({ animal, onComplete }) {
         ))}
       </div>
 
-      {/* Text overlay */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -232,7 +221,6 @@ export default function ChaseScene({ animal, onComplete }) {
         </motion.p>
       </motion.div>
 
-      {/* Progress bar */}
       <div style={{
         position: 'absolute',
         bottom: '10%',
@@ -262,7 +250,6 @@ export default function ChaseScene({ animal, onComplete }) {
         </div>
       </div>
 
-      {/* Flying birds */}
       {[...Array(3)].map((_, i) => (
         <motion.div
           key={`bird-${i}`}
