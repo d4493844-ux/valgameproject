@@ -111,18 +111,17 @@ export default function ChaseScene({ animal, onComplete }) {
         </motion.div>
       ))}
 
-      {/* THE CHASE - FIXED: ANIMAL IN FRONT, PERSON BEHIND */}
+      {/* THE CHASE - STARTS FROM LEFT, GOES TO RIGHT */}
       <div style={{
         width: '100%',
-        maxWidth: '800px',
         height: '300px',
         position: 'relative',
         zIndex: 1
       }}>
-        {/* Animal AHEAD - running RIGHT, stays in front */}
+        {/* Animal RUNNING AWAY - FLIPPED TO FACE RIGHT */}
         <motion.div
           animate={{
-            x: [100, window.innerWidth * 0.75]
+            left: ['5%', '75%']
           }}
           transition={{
             duration: 5,
@@ -130,8 +129,8 @@ export default function ChaseScene({ animal, onComplete }) {
           }}
           style={{
             position: 'absolute',
-            left: 0,
             top: '50%',
+            transform: 'translateY(-50%) scaleX(-1)', // FLIP HORIZONTALLY TO FACE RIGHT
             fontSize: '80px',
             zIndex: 2
           }}
@@ -139,10 +138,10 @@ export default function ChaseScene({ animal, onComplete }) {
           {animalEmojis[animal]}
         </motion.div>
 
-        {/* Person BEHIND - chasing, runs RIGHT */}
+        {/* Person CHASING - ALSO FLIPPED TO FACE RIGHT */}
         <motion.div
           animate={{
-            x: [0, window.innerWidth * 0.7]
+            left: ['0%', '65%']
           }}
           transition={{
             duration: 5,
@@ -150,35 +149,35 @@ export default function ChaseScene({ animal, onComplete }) {
           }}
           style={{
             position: 'absolute',
-            left: 0,
             top: '50%',
+            transform: 'translateY(-50%) scaleX(-1)', // FLIP HORIZONTALLY TO FACE RIGHT
             fontSize: '70px',
             zIndex: 1
           }}
         >
-          🏃‍♂️
+          🏃
         </motion.div>
 
-        {/* Heart trail behind runner */}
-        {[...Array(8)].map((_, i) => (
+        {/* Heart trail */}
+        {[...Array(10)].map((_, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, scale: 0 }}
+            initial={{ opacity: 0, scale: 0, left: '0%' }}
             animate={{
-              opacity: [0, 0.6, 0],
-              scale: [0, 1.5, 0],
-              x: [0, window.innerWidth * 0.7]
+              opacity: [0, 0.7, 0],
+              scale: [0, 1.8, 0],
+              left: ['0%', '65%']
             }}
             transition={{
               duration: 5,
-              delay: i * 0.4,
+              delay: i * 0.35,
               ease: 'linear'
             }}
             style={{
               position: 'absolute',
-              left: 0,
               top: '50%',
-              fontSize: '30px',
+              transform: 'translateY(-50%)',
+              fontSize: '35px',
               color: '#ff69b4'
             }}
           >
@@ -199,11 +198,11 @@ export default function ChaseScene({ animal, onComplete }) {
         }}
       >
         <h2 style={{
-          fontSize: '36px',
+          fontSize: '38px',
           color: '#fff',
-          textShadow: '2px 2px 20px rgba(0,0,0,0.3)',
+          textShadow: '3px 3px 20px rgba(0,0,0,0.4)',
           fontWeight: 'bold',
-          marginBottom: '10px'
+          marginBottom: '12px'
         }}>
           A Romantic Chase
         </h2>
@@ -211,13 +210,13 @@ export default function ChaseScene({ animal, onComplete }) {
           animate={{ opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 2, repeat: Infinity }}
           style={{
-            fontSize: '20px',
+            fontSize: '22px',
             color: '#ffe',
-            textShadow: '1px 1px 10px rgba(0,0,0,0.2)',
+            textShadow: '2px 2px 12px rgba(0,0,0,0.3)',
             fontStyle: 'italic'
           }}
         >
-          Following the heart through the sunset...
+          Chasing love through the sunset...
         </motion.p>
       </motion.div>
 
@@ -232,9 +231,9 @@ export default function ChaseScene({ animal, onComplete }) {
       }}>
         <div style={{
           width: '100%',
-          height: '8px',
+          height: '10px',
           background: 'rgba(255,255,255,0.3)',
-          borderRadius: '4px',
+          borderRadius: '5px',
           overflow: 'hidden',
           backdropFilter: 'blur(10px)'
         }}>
@@ -243,8 +242,8 @@ export default function ChaseScene({ animal, onComplete }) {
               height: '100%',
               background: 'linear-gradient(90deg, #ff69b4, #ff1493)',
               width: `${progress}%`,
-              borderRadius: '4px',
-              boxShadow: '0 0 20px rgba(255,20,147,0.5)'
+              borderRadius: '5px',
+              boxShadow: '0 0 20px rgba(255,20,147,0.6)'
             }}
           />
         </div>
