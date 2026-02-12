@@ -126,7 +126,7 @@ export default function CliffFall({ animal, onComplete }) {
           </motion.div>
         </>
       )}
-
+      
       {(phase === 'falling' || phase === 'holding' || phase === 'saved') && (
         <>
           <motion.div
